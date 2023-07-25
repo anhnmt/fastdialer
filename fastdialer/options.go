@@ -28,6 +28,8 @@ type DiskDBType uint8
 const (
 	LevelDB DiskDBType = iota
 	Pogreb
+	BBoltDB
+	BuntDB
 )
 
 type Options struct {
