@@ -12,10 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/projectdiscovery/fastdialer/fastdialer/ja3/impersonate"
 	"github.com/projectdiscovery/hmap/store/hybrid"
 	"github.com/projectdiscovery/networkpolicy"
-	retryabledns "github.com/projectdiscovery/retryabledns"
+	"github.com/projectdiscovery/retryabledns"
 	cryptoutil "github.com/projectdiscovery/utils/crypto"
 	errorutil "github.com/projectdiscovery/utils/errors"
 	iputil "github.com/projectdiscovery/utils/ip"
@@ -24,6 +23,8 @@ import (
 	"github.com/zmap/zcrypto/encoding/asn1"
 	ztls "github.com/zmap/zcrypto/tls"
 	"golang.org/x/net/proxy"
+
+	"github.com/projectdiscovery/fastdialer/fastdialer/ja3/impersonate"
 )
 
 // option to disable ztls fallback in case of handshake error
@@ -71,7 +72,7 @@ func NewDialer(options Options) (*Dialer, error) {
 	var dialerHistory *hybrid.HybridMap
 	if options.WithDialerHistory {
 		// we need to use disk to store all the dialed ips
-		dialerHistoryCacheOptions := hybrid.DefaultDiskOptions
+		dialerHistoryCacheOptions := hybrid.DefaultOptions
 		dialerHistoryCacheOptions.DBType = getHMAPDBType(options)
 		dialerHistory, err = hybrid.New(dialerHistoryCacheOptions)
 		if err != nil {
@@ -80,7 +81,7 @@ func NewDialer(options Options) (*Dialer, error) {
 	}
 	var dialerTLSData *hybrid.HybridMap
 	if options.WithTLSData {
-		dialerTLSData, err = hybrid.New(hybrid.DefaultDiskOptions)
+		dialerTLSData, err = hybrid.New(hybrid.DefaultOptions)
 		if err != nil {
 			return nil, err
 		}
