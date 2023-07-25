@@ -64,6 +64,7 @@ func NewDialer(options Options) (*Dialer, error) {
 	}
 
 	cacheOptions := getHMapConfiguration(options)
+	cacheOptions.DBType = hybrid.BBoltDB
 	resolvers = append(resolvers, options.BaseResolvers...)
 	hm, err := hybrid.New(cacheOptions)
 	if err != nil {
