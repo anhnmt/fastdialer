@@ -64,7 +64,7 @@ func NewDialer(options Options) (*Dialer, error) {
 	}
 
 	cacheOptions := getHMapConfiguration(options)
-	cacheOptions.DBType = hybrid.BBoltDB
+	cacheOptions.DBType = hybrid.PogrebDB
 	resolvers = append(resolvers, options.BaseResolvers...)
 	hm, err := hybrid.New(cacheOptions)
 	if err != nil {
@@ -73,7 +73,7 @@ func NewDialer(options Options) (*Dialer, error) {
 	var dialerHistory *hybrid.HybridMap
 	if options.WithDialerHistory {
 		// we need to use disk to store all the dialed ips
-		dialerHistoryCacheOptions := hybrid.DefaultHybridOptions
+		dialerHistoryCacheOptions := hybrid.DefaultDiskOptions
 		dialerHistoryCacheOptions.DBType = getHMAPDBType(options)
 		dialerHistory, err = hybrid.New(dialerHistoryCacheOptions)
 		if err != nil {
@@ -507,7 +507,7 @@ func getHMapConfiguration(options Options) hybrid.Options {
 		cacheOptions.DBType = getHMAPDBType(options)
 	case Hybrid:
 		cacheOptions = hybrid.DefaultHybridOptions
-		cacheOptions.DBType = hybrid.BBoltDB
+		cacheOptions.DBType = hybrid.PogrebDB
 	}
 	if options.WithCleanup {
 		cacheOptions.Cleanup = options.WithCleanup
